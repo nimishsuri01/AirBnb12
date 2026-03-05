@@ -13,7 +13,7 @@ app.use(methodOverride("_method"));
 app.engine("ejs", ejsMate);
 app.use(express.static(path.join(__dirname, "public")));
 
-const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
+const MONGO_URL = process.env.MONGO_URL || "mongodb://127.0.0.1:27017/wanderlust";
 
 main()
 .then(() => {
@@ -67,7 +67,7 @@ app.put("/listings/:id", async (req,res) => {
     let { id } = req.params;
    await Listing.findByIdAndUpdate(id, req.body.listing, { new: true, runValidators: true }
 );
-    res.redirect("/listings");
+    res.redirect("/listings"); 
 });
 
 //Delete Route 
@@ -77,6 +77,6 @@ app.delete("/listings/:id", async (req,res) => {
    res.redirect("/listings");
 });  
 
-app.listen(8080, () => {
+app.listen(process.env.PORT || 8080, () => {
     console.log("server is listening on port 8080");
 });
