@@ -3,15 +3,15 @@
 <body>
     <div class="row">
         <div class="col-8 offset-2">
-    <h3>Listing Details :</h3>
+    <h3 class="detail"><%= listing.title %></h3>
 
     <div class="card col-6 offset-3 show-card">
           <img src="<%= listing.image.url %>" class="card-img-top show-image" alt="listing_image">
   <div class="card-body">
     <p class="card-text">
-    <b><%= listing.title %></b></h5> <br>
+    <br>
     <%= listing.description %> <br>
-    &#8377; <%= listing.price ? listing.price.toLocaleString("en-IN") : "0"%> <br>
+    &#8377; <%= listing.price ? listing.price.toLocaleString("en-IN") : "0"%>/night <br>
     <%= listing.location %> <br>
     <%= listing.country %>
     </p>
@@ -30,5 +30,23 @@
     </div>
 
     </div>
+    </div>
+<hr>
+<!-- Review -->
+
+    <div class="col-8 offset-4 mt-3">
+        <h4>Leave a Review</h4>
+        <form action="/listings/<%= listing.id %>/reviews" method="post" novalidate class="needs-validation">
+            <div class="mb-3 mt-3">
+                <label for="rating" class="form-label">Rating</label>
+                <input class="form-range" type="range" min="1" max="5" id="rating" name="review[rating]" required >
+            </div>
+            <div class="mb-3 mt-3">
+                <label for="comment" class="form-label">Comments</label>
+                <textarea name="review[comment]" id="comment" cols="30" rows="5" class="form-control" required></textarea>
+                <br>
+                <button class="btn btn-outline-dark">Submit</button>
+            </div>
+        </form>
     </div>
 </body>

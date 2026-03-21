@@ -5,6 +5,9 @@ const Listing = require("./models/listing.js");
 const path = require("path");
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
+const wrapAsync = require("./utils/wrapAsync.js");
+const ExpressError = require("./utils/ExpressError.js")
+const Review = require("./models/review.js")
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -49,11 +52,12 @@ app.get("/listings/:id", async (req,res) => {
 });
 
 //Create Route
-app.post("/listings", async (req,res) => {
+app.post("/listings", wrapAsync(async (req,res,next) => {
     const newlisting = new Listing(req.body.listing);
     await newlisting.save();
     res.redirect("/listings");
-});
+})
+);
 
 //Edit Route
 app.get("/listings/:id/edit", async (req,res) => {
@@ -75,7 +79,24 @@ app.delete("/listings/:id", async (req,res) => {
     let { id } = req.params;
    let delteListing =  await Listing.findByIdAndDelete(id);
    res.redirect("/listings");
-});  
+}); 
+
+//Review Route
+app.post("/listings/:id/reviews", async(req,res) => {
+    let listing = await Listing.findById(req.params.id);
+    let newReview = new Review(req.body.review);
+
+    listing.reviews.push(newReview);
+    await newReview.save();
+    await listing.save();
+    console.log("new review saved");
+
+    res.redirect(`/listings/${listing._id}`);
+});
+
+app.use((err,req,res,next) => {
+    res.send("something went wrong");
+});
 
 app.listen(process.env.PORT || 8080, () => {
     console.log("server is listening on port 8080");
