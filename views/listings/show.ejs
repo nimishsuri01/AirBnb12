@@ -5,7 +5,7 @@
         <div class="col-8 offset-2">
     <h3 class="detail"><%= listing.title %></h3>
 
-    <div class="card col-6 offset-3 show-card">
+    <div class="card col-6 offset-3 show-card listing-card">
           <img src="<%= listing.image.url %>" class="card-img-top show-image" alt="listing_image">
   <div class="card-body">
     <p class="card-text">
@@ -31,7 +31,7 @@
 
     </div>
     </div>
-<hr>
+<HR>
 <!-- Review -->
 
     <div class="col-8 offset-4 mt-3">
@@ -48,5 +48,23 @@
                 <button class="btn btn-outline-dark">Submit</button>
             </div>
         </form>
-    </div>
+        <hr>
+
+        <!-- Comments when submit by user -->
+
+        <p><b>All Reviews</b></p>
+        <div class="row">
+        <% for (let review of listing.reviews) {%>
+        <div class="card col-5 ms-3 mb-3">
+    <div class="card-body">
+    <h5 class="card-title">Tim Cook</h5>
+    <h6 class="card-text"><%= review.comment %></h6>
+    <p class="card-text"><%= review.rating %><i class="fa-solid fa-star" style="color: gold;"></i></p>
+  </div>
+  <form class="mb-4" method="POST" action="/listings/<%=listing._id%>/reviews/<%=review.id%>?_method=Delete">
+    <button class="btn btn-sm btn-dark mt-2">Delete</button>
+  </form>
+</div>
+        <%  } %>
+        </div>
 </body>
