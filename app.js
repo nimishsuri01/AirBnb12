@@ -113,9 +113,9 @@ async function main() {
     await mongoose.connect(MONGO_URL);
 } 
 
-// app.get("/", (req, res) => {
-//     res.send("Hi, I am a root");
-// });
+app.get("/", (req, res) => {
+    res.redirect("/listings");
+});
 
 // Index Route 
 app.get("/listings", async (req,res) => {
