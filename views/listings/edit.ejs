@@ -1,8 +1,7 @@
 <% layout("/layouts/boilerplate") %>
 
-<body>
     <div class="row">
-        <div class="col-7 offset-2">
+        <div class="col-12 col-md-10 col-lg-7 mx-auto">
     <h3>Edit Your Listing</h3>
     <form method="POST" action="/listings/<%= listing._id %>?_method=PUT" class="needs-validation" novalidate>
         <div>
@@ -26,13 +25,13 @@
     </div>
 
         <div class="row">
-        <div class="mb-3 col-4 md-4">
+        <div class="mb-3 col-12 col-md-4">
         <label for="price" class="form-label">Price</label>
         <input name="listing[price]" value="<%= listing.price %>" type="number" class="form-control" required>
         <div class="invalid-feedback">Price should be Valid</div>
     </div>
 
-        <div class="mb-3 col-8 md-8">
+        <div class="mb-3 col-12 col-md-8">
         <label for="country" class="form-label">Country</label>
         <input name="listing[country]" value="<%= listing.country %>" type="text" class="form-control" required>
         <div class="invalid-feedback">Country name should be Valid</div>
@@ -45,9 +44,29 @@
         <div class="invalid-feedback">Location should be Valid</div>
     </div>
 
+        <div class="mb-3 mt-3">
+        <label for="type" class="form-label">Hotel type</label>
+        <select name="listing[type]" id="type" class="form-select">
+            <% for (let type of ["Hotel", "Resort", "Villa", "Apartment"]) { %>
+                <option value="<%= type %>" <%= listing.type === type ? "selected" : "" %>><%= type %></option>
+            <% } %>
+        </select>
+    </div>
+
+        <div class="mb-3">
+        <label class="form-label">Amenities</label>
+        <div class="amenity-checks">
+            <% for (let amenity of ["Wi-Fi", "Breakfast", "Pool", "Parking", "AC"]) { %>
+                <label>
+                    <input type="checkbox" name="listing[amenities][]" value="<%= amenity %>" <%= listing.amenities && listing.amenities.includes(amenity) ? "checked" : "" %>>
+                    <span><%= amenity %></span>
+                </label>
+            <% } %>
+        </div>
+    </div>
+
         <br>
         <button class="btn btn-dark add-btn">Edit</button>
     </form>
     </div>
     </div>
-</body>

@@ -1,3 +1,6 @@
+ const indiaHotels = require("./indiaHotels.js");
+ const generateDemoHotels = require("./generateDemoHotels.js");
+
  const sampleListings = [
   {
     title: "Modern Loft in Downtown",
@@ -337,4 +340,4 @@
   },
 ];
 
-module.exports = { data: sampleListings }; 
+module.exports = { data: [...sampleListings, ...indiaHotels, ...generateDemoHotels(8)] }; 

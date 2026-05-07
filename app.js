@@ -10,10 +10,17 @@ const ExpressError = require("./utils/ExpressError.js");
 const Review = require("./models/review.js");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
+const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const User = require("./models/user.js");
 
-const listings = require("./routes/listing.js");
-const reviews = require("./routes/review.js");
+const listingRouter = require("./routes/listing.js");
+const reviewRouter = require("./routes/review.js");
+const userRouter = require("./routes/user.js");
+const bookingRouter = require("./routes/booking.js");
+const bookingStandaloneRouter = require("./routes/bookingStandalone.js");
+const session = require("express-session");
+const flash = require("connect-flash");
+const indiaLocations = require("./utils/indiaLocations.js");
 // const { listingSchema , reviewSchema } = require("./schema.js");
 
 app.set("view engine", "ejs");
@@ -22,6 +29,76 @@ app.use(express.urlencoded({extended : true}));
 app.use(methodOverride("_method"));
 app.engine("ejs", ejsMate);
 app.use(express.static(path.join(__dirname, "public")));
+
+//Sessions
+const sessionOptions = {
+    secret : "mysupersecretcode",
+    resave : false,
+    saveUninitialized : true,
+};
+
+app.use(session(sessionOptions));
+app.use(flash());
+
+// Password Setup
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+
+const googleAuthEnabled = Boolean(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET);
+
+if (googleAuthEnabled) {
+    passport.use(new GoogleStrategy({
+        clientID: process.env.GOOGLE_CLIENT_ID,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+        callbackURL: process.env.GOOGLE_CALLBACK_URL || "http://localhost:8080/auth/google/callback",
+    }, async (accessToken, refreshToken, profile, done) => {
+        try {
+            const email = profile.emails && profile.emails[0] ? profile.emails[0].value : `${profile.id}@google.airbnb.local`;
+            let user = await User.findOne({ googleId: profile.id });
+
+            if (!user) {
+                user = await User.findOne({ email });
+            }
+
+            if (!user) {
+                user = new User({
+                    username: email,
+                    email,
+                    googleId: profile.id,
+                    displayName: profile.displayName,
+                    avatar: profile.photos && profile.photos[0] ? profile.photos[0].value : undefined,
+                });
+            } else {
+                user.googleId = profile.id;
+                user.displayName = user.displayName || profile.displayName;
+                user.avatar = user.avatar || (profile.photos && profile.photos[0] ? profile.photos[0].value : undefined);
+            }
+
+            await user.save();
+            return done(null, user);
+        } catch (err) {
+            return done(err);
+        }
+    }));
+}
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
+app.use((req,res,next) => {
+    res.locals.success = req.flash("success");
+    res.locals.error = req.flash("error");
+    res.locals.currUser = req.user;
+    res.locals.googleAuthEnabled = googleAuthEnabled;
+    res.locals.indiaLocations = indiaLocations;
+    next();
+})
+app.use("/listings", listingRouter);
+app.use("/listings/:id/reviews", reviewRouter);
+app.use("/listings/:id/bookings", bookingRouter);
+app.use("/bookings", bookingStandaloneRouter);
+app.use("/", userRouter);
 
 const MONGO_URL = process.env.MONGO_URL || "mongodb://127.0.0.1:27017/wanderlust";
 
@@ -36,20 +113,9 @@ async function main() {
     await mongoose.connect(MONGO_URL);
 } 
 
-// Password Setup
-app.use(passport.initialize());
-app.use(passport.session());
-passport.use(new LocalStrategy(User.authenticate()));
-
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
-
-app.use("/listings", listings);
-app.use("/listings/:id/reviews", reviews);
-
-app.get("/", (req, res) => {
-    res.send("Hi, I am a root");
-});
+// app.get("/", (req, res) => {
+//     res.send("Hi, I am a root");
+// });
 
 // Index Route 
 app.get("/listings", async (req,res) => {

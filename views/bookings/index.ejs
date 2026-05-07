@@ -1,0 +1,34 @@
+<% layout("/layouts/boilerplate") %>
+
+<section class="dashboard-header">
+  <div>
+    <p class="eyebrow">Trips</p>
+    <h1>My bookings</h1>
+    <p class="muted-copy">All confirmed hotel bookings are saved here.</p>
+  </div>
+  <a href="/listings" class="btn btn-dark add-btn">Book another stay</a>
+</section>
+
+<% if(bookings.length === 0) { %>
+  <div class="empty-state">
+    <h3>No bookings yet</h3>
+    <p>Choose a hotel and complete the booking flow.</p>
+  </div>
+<% } else { %>
+  <div class="trip-list">
+    <% for (let booking of bookings) { %>
+      <article class="trip-card">
+        <img src="<%= booking.listing.image.url %>" alt="hotel image">
+        <div>
+          <h4><%= booking.listing.title %></h4>
+          <p><%= booking.listing.location %>, <%= booking.listing.country %></p>
+          <p><%= booking.checkIn.toDateString() %> to <%= booking.checkOut.toDateString() %></p>
+        </div>
+        <div class="trip-price">
+          <b>&#8377; <%= booking.totalPrice.toLocaleString("en-IN") %></b>
+          <span><%= booking.status %></span>
+        </div>
+      </article>
+    <% } %>
+  </div>
+<% } %>

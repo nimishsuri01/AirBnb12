@@ -2,6 +2,9 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    overflow-x: hidden;
+    color: #222222;
+    background-color: #fff;
 }
 
 .container {
@@ -10,8 +13,16 @@ body {
 
 /* NavBar */
 .navbar {
-    height: 5rem;
+    min-height: 5rem;
     background-color : white;
+}
+
+.navbar-collapse {
+    background-color: white;
+}
+
+.nav-search {
+    width: min(100%, 28rem);
 }
 
 .fa-airbnb {
@@ -27,12 +38,15 @@ body {
 
 .f-info {
     text-align: center;
-    height: 10rem;
+    min-height: 10rem;
     background-color: #ebebeb;
+    display: flex;
+    flex-direction: column;
     justify-content: center;
-    flew-wrap: wrap;
-    align-items: space-between;
+    align-items: center;
+    flex-wrap: wrap;
     width: 100%;
+    padding: 1.5rem 1rem;
 }
 
 .f-info-language {
@@ -85,6 +99,11 @@ body {
 .listing-card {
     border: none !important;
     margin-bottom: 2rem;
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.listing-card:hover {
+    transform: translateY(-2px);
 }
 
 .card-img-top {
@@ -93,12 +112,17 @@ body {
     object-fit: cover !important;
 }
 
+.listing-img {
+    height: clamp(15rem, 28vw, 20rem);
+}
+
 .card-body {
-    padding: 0 !important;
+    padding: 0.85rem 0 0 !important;
 }
 
 .listing-link {
     text-decoration: none;
+    color: inherit;
 }
 
 .card-img-overlay {
@@ -117,11 +141,14 @@ body {
 
 /* Show Image */
 .show-image {
-    height: 30vh;
+    height: clamp(16rem, 45vw, 28rem);
 }
 
 .btns {
     display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    align-items: center;
 }
 
 .show-card {
@@ -129,8 +156,509 @@ body {
     padding-right: 0;
 }
 
-.detail {
+.market-header,
+.dashboard-header,
+.show-heading {
     display: flex;
-    flex-direction: column;
-    padding-left: 13rem;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.market-header h1,
+.dashboard-header h1 {
+    font-size: clamp(2rem, 5vw, 3.8rem);
+    line-height: 1;
+    margin: 0;
+    max-width: 720px;
+}
+
+.eyebrow {
+    color: #fe424d;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0;
+    margin-bottom: 0.4rem;
+    text-transform: uppercase;
+}
+
+.muted-copy {
+    color: #6b6b6b;
+}
+
+.host-pill {
+    background-color: #f7f7f7;
+    border: 1px solid #e7e7e7;
+    border-radius: 999px;
+    margin: 0 0 0.5rem;
+    padding: 0.55rem 0.9rem;
+    white-space: nowrap;
+}
+
+.show-title {
+    margin: 0 0 1rem;
+}
+
+.listing-description {
+    color: #3d3d3d;
+    display: inline-block;
+    margin-bottom: 0.75rem;
+}
+
+#filters {
+    display: flex;
+    gap: 1.25rem 2rem;
+    overflow-x: auto;
+    padding: 1.25rem 0 0.5rem;
+    scrollbar-width: thin;
+}
+
+.filter {
+    flex: 0 0 auto;
+    text-align: center;
+    opacity: 0.65;
+}
+
+.filter:hover {
+    opacity: 1;
+}
+
+.filter p {
+    margin-bottom: 0;
+    font-size: 0.85rem;
+    white-space: nowrap;
+}
+
+.review-card {
+    padding: 1rem;
+    border: 1px solid #ebebeb !important;
+    border-radius: 0.75rem !important;
+}
+
+.auth-shell {
+    align-items: center;
+    min-height: 62vh;
+}
+
+.auth-panel {
+    border: 1px solid #e8e8e8;
+    border-radius: 1rem;
+    box-shadow: 0 18px 45px rgba(0, 0, 0, 0.08);
+    padding: clamp(1.25rem, 4vw, 2rem);
+}
+
+.google-btn {
+    align-items: center;
+    display: flex !important;
+    gap: 0.65rem;
+    justify-content: center;
+}
+
+.auth-divider {
+    align-items: center;
+    color: #777;
+    display: flex;
+    gap: 1rem;
+    margin: 1rem 0;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+    background-color: #e8e8e8;
+    content: "";
+    flex: 1;
+    height: 1px;
+}
+
+.auth-switch {
+    margin: 1rem 0 0;
+    text-align: center;
+}
+
+.auth-switch a {
+    color: #fe424d;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.empty-state {
+    background-color: #f7f7f7;
+    border: 1px solid #ededed;
+    border-radius: 1rem;
+    margin: 2rem 0;
+    padding: 2rem;
+    text-align: center;
+}
+
+.signin-nudge {
+    align-items: center;
+    background-color: #f7f7f7;
+    border: 1px solid #e9e9e9;
+    border-radius: 0.75rem;
+    display: flex;
+    gap: 1rem;
+    justify-content: space-between;
+    padding: 1rem;
+}
+
+.signin-nudge p {
+    margin: 0;
+}
+
+.host-card {
+    border: 1px solid #ededed !important;
+    border-radius: 1rem !important;
+    padding: 0.75rem;
+}
+
+.host-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+}
+
+.listing-filters {
+    align-items: end;
+    background: #f8f8f8;
+    border: 1px solid #eeeeee;
+    border-radius: 1rem;
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) auto auto;
+    margin-top: 1rem;
+    padding: 1rem;
+}
+
+.listing-card-shell {
+    position: relative;
+}
+
+.wishlist-form {
+    position: absolute;
+    right: 0.75rem;
+    top: 0.75rem;
+    z-index: 2;
+}
+
+.wishlist-btn {
+    align-items: center;
+    background: rgba(255, 255, 255, 0.92);
+    border: none;
+    border-radius: 999px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.16);
+    color: #222;
+    display: inline-flex;
+    height: 2.5rem;
+    justify-content: center;
+    width: 2.5rem;
+}
+
+.wishlist-btn.is-saved {
+    color: #fe424d;
+}
+
+.show-layout {
+    align-items: start;
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: minmax(0, 1fr) 21rem;
+}
+
+.booking-panel,
+.booking-summary,
+.booking-form-panel,
+.confirmation-card {
+    border: 1px solid #e9e9e9;
+    border-radius: 1rem;
+    box-shadow: 0 18px 45px rgba(0, 0, 0, 0.08);
+}
+
+.booking-panel {
+    padding: 1.25rem;
+    position: sticky;
+    top: 6rem;
+}
+
+.booking-panel h4 {
+    font-size: 1.6rem;
+}
+
+.booking-panel h4 span {
+    color: #666;
+    font-size: 1rem;
+    font-weight: 400;
+}
+
+.rating-pill {
+    background: #fff4f4;
+    border-radius: 999px;
+    color: #fe424d;
+    display: inline-flex;
+    gap: 0.3rem;
+    margin-left: 0.75rem;
+    padding: 0.3rem 0.6rem;
+}
+
+.amenity-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+}
+
+.amenity-list span {
+    background: #f7f7f7;
+    border: 1px solid #ececec;
+    border-radius: 999px;
+    padding: 0.4rem 0.7rem;
+}
+
+.amenity-checks {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+}
+
+.amenity-checks label {
+    cursor: pointer;
+}
+
+.amenity-checks input {
+    position: absolute;
+    opacity: 0;
+}
+
+.amenity-checks span {
+    border: 1px solid #dddddd;
+    border-radius: 999px;
+    display: inline-block;
+    padding: 0.45rem 0.75rem;
+}
+
+.amenity-checks input:checked + span {
+    background: #222;
+    border-color: #222;
+    color: #fff;
+}
+
+.booking-page {
+    align-items: start;
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: minmax(0, 1fr) 22rem;
+    margin-top: 2rem;
+}
+
+.booking-form-panel {
+    padding: clamp(1.25rem, 4vw, 2rem);
+}
+
+.booking-form-panel h1,
+.confirmation-card h1 {
+    font-size: clamp(2rem, 5vw, 3.4rem);
+    line-height: 1;
+}
+
+.booking-grid {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin-bottom: 1rem;
+}
+
+.payment-options {
+    display: grid;
+    gap: 0.75rem;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.payment-options label {
+    cursor: pointer;
+}
+
+.payment-options input {
+    position: absolute;
+    opacity: 0;
+}
+
+.payment-options span {
+    border: 1px solid #dddddd;
+    border-radius: 0.75rem;
+    display: block;
+    padding: 0.8rem;
+    text-align: center;
+}
+
+.payment-options input:checked + span {
+    background: #222;
+    border-color: #222;
+    color: #fff;
+}
+
+.booking-summary {
+    overflow: hidden;
+    padding: 1rem;
+}
+
+.booking-summary img {
+    aspect-ratio: 4 / 3;
+    border-radius: 0.75rem;
+    object-fit: cover;
+    width: 100%;
+}
+
+.summary-row,
+.trip-card,
+.confirmation-details div,
+.stats-grid div {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+}
+
+.confirmation-page {
+    display: grid;
+    margin: 2rem auto;
+    max-width: 760px;
+}
+
+.confirmation-card {
+    padding: clamp(1.25rem, 5vw, 2.5rem);
+    text-align: center;
+}
+
+.success-mark {
+    align-items: center;
+    background: #20a65a;
+    border-radius: 999px;
+    color: #fff;
+    display: inline-flex;
+    height: 3rem;
+    justify-content: center;
+    margin-bottom: 1rem;
+    width: 3rem;
+}
+
+.confirmation-details {
+    display: grid;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+    text-align: left;
+}
+
+.confirmation-details div,
+.stats-grid div {
+    background: #f8f8f8;
+    border: 1px solid #eeeeee;
+    border-radius: 0.75rem;
+    padding: 0.9rem;
+}
+
+.trip-list {
+    display: grid;
+    gap: 1rem;
+}
+
+.trip-card {
+    border: 1px solid #eeeeee;
+    border-radius: 1rem;
+    gap: 1rem;
+    padding: 0.75rem;
+}
+
+.trip-card img {
+    border-radius: 0.75rem;
+    height: 6rem;
+    object-fit: cover;
+    width: 8rem;
+}
+
+.trip-card h4,
+.trip-card p {
+    margin-bottom: 0.25rem;
+}
+
+.trip-price {
+    text-align: right;
+}
+
+.trip-price span,
+.stats-grid span {
+    color: #666;
+    display: block;
+}
+
+.stats-grid {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    margin: 1.5rem 0;
+}
+
+.stats-grid b {
+    font-size: 1.35rem;
+}
+
+@media (max-width: 767.98px) {
+    .navbar-collapse {
+        padding: 1rem 0;
+    }
+
+    .navbar-nav .nav-link {
+        padding-left: 0.25rem;
+    }
+
+    .show-image {
+        height: 16rem;
+    }
+
+    .market-header,
+    .dashboard-header,
+    .show-heading,
+    .signin-nudge {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .host-pill {
+        white-space: normal;
+    }
+
+    .btns .btn,
+    .btns form {
+        width: 100%;
+    }
+
+    .btns form .btn {
+        width: 100%;
+    }
+
+    .listing-filters,
+    .show-layout,
+    .booking-page,
+    .booking-grid,
+    .payment-options,
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .booking-panel {
+        position: static;
+    }
+
+    .trip-card {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .trip-card img {
+        height: 12rem;
+        width: 100%;
+    }
+
+    .trip-price {
+        text-align: left;
+    }
 }

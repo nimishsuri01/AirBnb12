@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const review = require("./review");
 const Schema = mongoose.Schema;
 
 const listingSchema = new Schema ({
@@ -18,12 +17,30 @@ const listingSchema = new Schema ({
     price : Number,
     location: String,
     country : String,
+    type: {
+        type: String,
+        default: "Hotel",
+    },
+    amenities: {
+        type: [String],
+        default: ["Wi-Fi", "Breakfast"],
+    },
+    gallery: [
+        {
+            url: String,
+            filename: String,
+        },
+    ],
     reviews : [
         {
             type: Schema.Types.ObjectId,
             ref : "Review"
         },
     ],
+    owner : {
+        type : Schema.Types.ObjectId,
+        ref : "User",
+    }
 });
 
 const Listing = mongoose.model("Listing", listingSchema);

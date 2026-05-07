@@ -1,0 +1,39 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="row auth-shell mt-4">
+    <div class="col-12 col-md-8 col-lg-5 mx-auto">
+    <div class="auth-panel">
+    <h2>Create your account</h2>
+    <p class="muted-copy">Start saving trips, reviewing stays, and hosting your own hotels.</p>
+        <% if(googleAuthEnabled) { %>
+        <a href="/auth/google" class="btn btn-outline-dark w-100 mb-3 google-btn">
+            <i class="fa-brands fa-google"></i>
+            Continue with Google
+        </a>
+        <% } else { %>
+        <button class="btn btn-outline-dark w-100 mb-3 google-btn" type="button" disabled>
+            <i class="fa-brands fa-google"></i>
+            Google setup needed
+        </button>
+        <% } %>
+        <div class="auth-divider"><span>or</span></div>
+        <form action="/signup" method="POST" class="needs-validation" novalidate>
+            <div class="mb-3">
+                <label for="username" id ="username" class="form-label">Username</label>
+                <input name="username" type="text" class="form-control" required>
+                <div class="valid-feedback">looks good!</div>
+            </div>
+            <div class="mb-3">
+                <label for="email" id ="email" class="form-label">Email</label>
+                <input name="email" type="email" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="password" id ="password" class="form-label">Password</label>
+                <input name="password" type="password" class="form-control" required>
+            </div>
+            <button class="btn btn-dark add-btn w-100">Sign up</button>
+        </form>
+        <p class="auth-switch">Already have an account? <a href="/login">Log in</a></p>
+    </div>
+    </div>
+</div>

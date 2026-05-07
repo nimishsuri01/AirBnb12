@@ -1,0 +1,88 @@
+<% layout("/layouts/boilerplate") %>
+
+<section class="dashboard-header">
+  <div>
+    <p class="eyebrow">Host dashboard</p>
+    <h1>Your hotels</h1>
+    <p class="muted-copy">Manage the places you have added to AirBnb.</p>
+  </div>
+  <a href="/listings/new" class="btn btn-dark add-btn">Add a hotel</a>
+</section>
+
+<section class="stats-grid">
+  <div>
+    <span>Hotels</span>
+    <b><%= myListings.length %></b>
+  </div>
+  <div>
+    <span>Bookings</span>
+    <b><%= hostBookings.length %></b>
+  </div>
+  <div>
+    <span>Reviews</span>
+    <b><%= totalReviews %></b>
+  </div>
+  <div>
+    <span>Revenue</span>
+    <b>&#8377; <%= totalRevenue.toLocaleString("en-IN") %></b>
+  </div>
+</section>
+
+<% if(myListings.length === 0) { %>
+  <div class="empty-state">
+    <h3>No hotels yet</h3>
+    <p>Add your first hotel and it will appear here.</p>
+    <a href="/listings/new" class="btn btn-dark add-btn">Add hotel</a>
+  </div>
+<% } else { %>
+  <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
+    <% for (let listing of myListings) { %>
+      <div class="col">
+        <div class="card listing-card host-card h-100">
+          <img src="<%= listing.image && listing.image.url ? listing.image.url : '' %>" class="card-img-top listing-img" alt="listing_image">
+          <div class="card-body">
+            <p class="card-text">
+              <b><%= listing.title %></b><br>
+              <span><%= listing.location %>, <%= listing.country %></span><br>
+              &#8377; <%= listing.price ? listing.price.toLocaleString("en-IN") : "0" %> / night
+            </p>
+            <div class="host-actions">
+              <a href="/listings/<%= listing._id %>" class="btn btn-outline-dark btn-sm">View</a>
+              <a href="/listings/<%= listing._id %>/edit" class="btn btn-dark btn-sm add-btn">Edit</a>
+              <form method="POST" action="/listings/<%= listing._id %>?_method=Delete">
+                <button class="btn btn-outline-danger btn-sm">Delete</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% } %>
+  </div>
+<% } %>
+
+<% if(hostBookings.length > 0) { %>
+  <section class="host-bookings">
+    <div class="dashboard-header">
+      <div>
+        <p class="eyebrow">Reservations</p>
+        <h1>Recent guest bookings</h1>
+      </div>
+    </div>
+    <div class="trip-list">
+      <% for (let booking of hostBookings.slice(0, 6)) { %>
+        <article class="trip-card">
+          <img src="<%= booking.listing.image.url %>" alt="hotel image">
+          <div>
+            <h4><%= booking.listing.title %></h4>
+            <p><%= booking.guestName %> · <%= booking.guests %> guests</p>
+            <p><%= booking.checkIn.toDateString() %> to <%= booking.checkOut.toDateString() %></p>
+          </div>
+          <div class="trip-price">
+            <b>&#8377; <%= booking.totalPrice.toLocaleString("en-IN") %></b>
+            <span><%= booking.paymentMethod %></span>
+          </div>
+        </article>
+      <% } %>
+    </div>
+  </section>
+<% } %>

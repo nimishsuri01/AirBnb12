@@ -1,0 +1,67 @@
+<% layout("/layouts/boilerplate") %>
+
+<section class="booking-page">
+  <div class="booking-form-panel">
+    <p class="eyebrow">Complete your booking</p>
+    <h1><%= listing.title %></h1>
+    <p class="muted-copy"><%= listing.location %>, <%= listing.country %></p>
+
+    <form method="POST" action="/listings/<%= listing._id %>/bookings" class="needs-validation booking-form" novalidate>
+      <div class="booking-grid">
+        <div>
+          <label class="form-label" for="checkIn">Check-in</label>
+          <input class="form-control" id="checkIn" type="date" name="booking[checkIn]" required>
+        </div>
+        <div>
+          <label class="form-label" for="checkOut">Check-out</label>
+          <input class="form-control" id="checkOut" type="date" name="booking[checkOut]" required>
+        </div>
+      </div>
+
+      <div class="booking-grid">
+        <div>
+          <label class="form-label" for="guests">Guests</label>
+          <input class="form-control" id="guests" type="number" min="1" value="1" name="booking[guests]" required>
+        </div>
+        <div>
+          <label class="form-label" for="phone">Phone</label>
+          <input class="form-control" id="phone" type="tel" name="booking[phone]" placeholder="+91 98765 43210" required>
+        </div>
+      </div>
+
+      <div class="booking-grid">
+        <div>
+          <label class="form-label" for="guestName">Full name</label>
+          <input class="form-control" id="guestName" type="text" name="booking[guestName]" value="<%= currUser.displayName || currUser.username %>" required>
+        </div>
+        <div>
+          <label class="form-label" for="guestEmail">Email for confirmation</label>
+          <input class="form-control" id="guestEmail" type="email" name="booking[guestEmail]" value="<%= currUser.email %>" required>
+        </div>
+      </div>
+
+      <label class="form-label">Payment option</label>
+      <div class="payment-options">
+        <% for (let method of ["UPI", "Card", "Pay at hotel"]) { %>
+          <label>
+            <input type="radio" name="booking[paymentMethod]" value="<%= method %>" <%= method === "UPI" ? "checked" : "" %>>
+            <span><%= method %></span>
+          </label>
+        <% } %>
+      </div>
+
+      <button class="btn btn-dark add-btn w-100 mt-3">Confirm booking</button>
+    </form>
+  </div>
+
+  <aside class="booking-summary">
+    <img src="<%= listing.image.url %>" alt="hotel image">
+    <h4><%= listing.title %></h4>
+    <p><%= listing.location %>, <%= listing.country %></p>
+    <div class="summary-row">
+      <span>Price</span>
+      <b>&#8377; <%= listing.price ? listing.price.toLocaleString("en-IN") : "0" %> / night</b>
+    </div>
+    <p class="muted-copy">Final total is calculated after your selected dates.</p>
+  </aside>
+</section>

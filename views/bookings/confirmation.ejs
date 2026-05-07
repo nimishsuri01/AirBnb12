@@ -1,0 +1,24 @@
+<% layout("/layouts/boilerplate") %>
+
+<section class="confirmation-page">
+  <div class="confirmation-card">
+    <div class="success-mark"><i class="fa-solid fa-check"></i></div>
+    <p class="eyebrow">Booking confirmed</p>
+    <h1><%= booking.listing.title %></h1>
+    <p class="muted-copy"><%= booking.listing.location %>, <%= booking.listing.country %></p>
+
+    <div class="confirmation-details">
+      <div><span>Check-in</span><b><%= booking.checkIn.toDateString() %></b></div>
+      <div><span>Check-out</span><b><%= booking.checkOut.toDateString() %></b></div>
+      <div><span>Guests</span><b><%= booking.guests %></b></div>
+      <div><span>Total</span><b>&#8377; <%= booking.totalPrice.toLocaleString("en-IN") %></b></div>
+      <div><span>Payment</span><b><%= booking.paymentMethod %></b></div>
+      <div><span>Email</span><b><%= booking.emailSent ? "Sent" : "Saved in app" %></b></div>
+    </div>
+
+    <div class="btns mt-4">
+      <a href="/bookings" class="btn btn-dark add-btn">View my trips</a>
+      <a href="/listings" class="btn btn-outline-dark">Explore more</a>
+    </div>
+  </div>
+</section>

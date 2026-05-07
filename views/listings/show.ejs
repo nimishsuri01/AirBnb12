@@ -1,32 +1,68 @@
 <% layout("/layouts/boilerplate") %>
 
-<body>
     <div class="row">
-        <div class="col-8 offset-2">
-    <h3 class="detail"><%= listing.title %></h3>
+        <div class="col-12 col-lg-8 mx-auto">
+    <div class="show-heading">
+    <div>
+    <p class="eyebrow"><%= listing.location %>, <%= listing.country %></p>
+    <h3 class="show-title"><%= listing.title %></h3>
+    </div>
+    <% if(listing.owner) { %>
+      <p class="host-pill">Hosted by <%= listing.owner.displayName || listing.owner.username %></p>
+    <% } %>
+    </div>
 
-    <div class="card col-6 offset-3 show-card listing-card">
+    <div class="show-layout">
+    <div>
+    <div class="card show-card listing-card">
           <img src="<%= listing.image.url %>" class="card-img-top show-image" alt="listing_image">
   <div class="card-body">
     <p class="card-text">
     <br>
-    <%= listing.description %> <br>
-    &#8377; <%= listing.price ? listing.price.toLocaleString("en-IN") : "0"%>/night <br>
-    <%= listing.location %> <br>
-    <%= listing.country %>
+    
+    <span class="listing-description"><%= listing.description %></span> <br>
+    <b>&#8377; <%= listing.price ? listing.price.toLocaleString("en-IN") : "0"%>/night</b>
+    <% if(listing.averageRating && listing.averageRating > 0) { %>
+      <span class="rating-pill"><i class="fa-solid fa-star"></i> <%= listing.averageRating.toFixed(1) %></span>
+    <% } %>
     </p>
+    <% if(listing.amenities && listing.amenities.length) { %>
+      <div class="amenity-list">
+        <% for (let amenity of listing.amenities) { %>
+          <span><%= amenity %></span>
+        <% } %>
+      </div>
+    <% } %>
     </div>
+    </div>
+    </div>
+
+    <aside class="booking-panel">
+      <p class="eyebrow">Reserve this stay</p>
+      <h4>&#8377; <%= listing.price ? listing.price.toLocaleString("en-IN") : "0"%> <span>/ night</span></h4>
+      <p class="muted-copy">Choose your dates, guests, and payment option on the next step.</p>
+      <% if(currUser) { %>
+        <a href="/listings/<%= listing._id %>/bookings/new" class="btn btn-dark add-btn w-100">Book now</a>
+        <form class="mt-2" method="POST" action="/wishlist/<%= listing._id %>/toggle">
+          <button class="btn btn-outline-dark w-100" type="submit"><i class="fa-regular fa-heart"></i> Save to wishlist</button>
+        </form>
+      <% } else { %>
+        <a href="/login" class="btn btn-dark add-btn w-100">Log in to book</a>
+      <% } %>
+    </aside>
     </div>
 
     <br>
 
     <div class="btns">
-    <a href="/listings/<%= listing._id %>/edit" class="btn btn-dark col-1 offset-3 add-btn">Edit</a>
+    <% if(currUser && listing.owner && listing.owner._id.equals(currUser._id)) { %>
+    <a href="/listings/<%= listing._id %>/edit" class="btn btn-dark add-btn">Edit</a>
     <br>
     
     <form method="POST" action="/listings/<%= listing._id %>?_method=Delete">
-        <button class="btn btn-dark offset-5">Delete</button>
+        <button class="btn btn-dark">Delete</button>
     </form>
+    <% } %>
     </div>
 
     </div>
@@ -34,8 +70,9 @@
 <HR>
 <!-- Review -->
 
-    <div class="col-8 offset-4 mt-3">
+    <div class="col-12 col-lg-8 mx-auto mt-3">
         <h4>Leave a Review</h4>
+        <% if(currUser) { %>
         <form action="/listings/<%= listing.id %>/reviews" method="post" novalidate class="needs-validation">
             <div class="mb-3 mt-3">
                 <label for="rating" class="form-label">Rating</label>
@@ -48,23 +85,32 @@
                 <button class="btn btn-outline-dark">Submit</button>
             </div>
         </form>
+        <% } else { %>
+          <div class="signin-nudge">
+            <p>Log in to share your experience at this stay.</p>
+            <a href="/login" class="btn btn-dark add-btn">Log in to review</a>
+          </div>
+        <% } %>
         <hr>
 
         <!-- Comments when submit by user -->
 
         <p><b>All Reviews</b></p>
-        <div class="row">
+        <div class="row row-cols-1 row-cols-md-2 g-3">
         <% for (let review of listing.reviews) {%>
-        <div class="card col-5 ms-3 mb-3">
+        <div class="col">
+        <div class="card review-card h-100">
     <div class="card-body">
-    <h5 class="card-title">Tim Cook</h5>
+    <h5 class="card-title"><%= review.author ? (review.author.displayName || review.author.username) : "Guest" %></h5>
     <h6 class="card-text"><%= review.comment %></h6>
     <p class="card-text"><%= review.rating %><i class="fa-solid fa-star" style="color: gold;"></i></p>
   </div>
+  <% if(currUser && review.author && review.author._id.equals(currUser._id)) { %>
   <form class="mb-4" method="POST" action="/listings/<%=listing._id%>/reviews/<%=review.id%>?_method=Delete">
     <button class="btn btn-sm btn-dark mt-2">Delete</button>
   </form>
+  <% } %>
+</div>
 </div>
         <%  } %>
         </div>
-</body>

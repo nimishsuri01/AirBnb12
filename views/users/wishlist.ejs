@@ -1,0 +1,40 @@
+<% layout("/layouts/boilerplate") %>
+
+<section class="dashboard-header">
+  <div>
+    <p class="eyebrow">Saved stays</p>
+    <h1>Your wishlist</h1>
+    <p class="muted-copy">Hotels you saved for later.</p>
+  </div>
+  <a href="/listings" class="btn btn-dark add-btn">Explore hotels</a>
+</section>
+
+<% if(wishlist.length === 0) { %>
+  <div class="empty-state">
+    <h3>No saved hotels yet</h3>
+    <p>Tap the heart on a hotel card to save it here.</p>
+  </div>
+<% } else { %>
+  <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
+    <% for (let listing of wishlist) { %>
+      <div class="col">
+        <div class="card listing-card host-card h-100">
+          <img src="<%= listing.image.url %>" class="card-img-top listing-img" alt="listing image">
+          <div class="card-body">
+            <p class="card-text">
+              <b><%= listing.title %></b><br>
+              <span><%= listing.location %>, <%= listing.country %></span><br>
+              &#8377; <%= listing.price ? listing.price.toLocaleString("en-IN") : "0" %> / night
+            </p>
+            <div class="host-actions">
+              <a href="/listings/<%= listing._id %>" class="btn btn-dark btn-sm add-btn">View</a>
+              <form method="POST" action="/wishlist/<%= listing._id %>/toggle">
+                <button class="btn btn-outline-danger btn-sm">Remove</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% } %>
+  </div>
+<% } %>
