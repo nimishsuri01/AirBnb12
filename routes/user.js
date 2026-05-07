@@ -3,8 +3,7 @@ const router = express.Router();
 const User = require("../models/user.js");
 const wrapAsync = require("../utils/wrapAsync.js");
 const passport = require("passport");
-const { saveRedirectUrl } = require("../middleware.js");
-const { isLoggedIn } = require("../middleware.js");
+const { saveRedirectUrl, isLoggedIn } = require("../utils/authMiddleware.js");
 const userController = require("../controllers/user.js");
 
 const requireGoogleConfig = (req,res,next) => {

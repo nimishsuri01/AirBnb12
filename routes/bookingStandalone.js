@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const wrapAsync = require("../utils/wrapAsync");
-const { isLoggedIn } = require("../middleware");
+const { isLoggedIn } = require("../utils/authMiddleware");
 const bookingController = require("../controllers/booking");
 
 router.get("/", isLoggedIn, wrapAsync(bookingController.myBookings));

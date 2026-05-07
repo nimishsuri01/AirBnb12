@@ -6,7 +6,7 @@ const Review = require("../models/review.js");
 const Listing = require("../models/listing.js");
 const { reviewSchema } = require("../schema.js");
 const reviewController = require("../controllers/review.js");
-const { isLoggedIn, isReviewAuthor } = require("../middleware.js");
+const { isLoggedIn, isReviewAuthor } = require("../utils/authMiddleware.js");
 
 // Create Review 
 router.post("/", isLoggedIn, wrapAsync(reviewController.createReview));

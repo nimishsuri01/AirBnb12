@@ -5,7 +5,7 @@ const ExpressError = require("../utils/ExpressError.js")
 const Listing = require("../models/listing.js");
 const { listingSchema , reviewSchema } = require("../schema.js");
 const Review = require("../models/review.js")
-const {isLoggedIn, isOwner} = require("../middleware.js");
+const {isLoggedIn, isOwner} = require("../utils/authMiddleware.js");
 const listingController = require("../controllers/listing.js")
 
 // Index Route 
